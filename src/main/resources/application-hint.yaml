@@ -1,0 +1,30 @@
+# 命名数据源  这个是自定义的
+spring:
+  shardingsphere:
+    datasource:
+      names: ds0,ds1
+      # 配置数据源ds0
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/test-0?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password: pwx12345
+      # 配置数据源ds1
+      ds1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/test-1?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password: pwx12345
+    # 配置默认数据源ds0
+    default-data-source-name: ds0
+
+    # Hint强制路由
+    # 使用t_city表测试强制路由到库
+    sharding:
+      tables:
+        t_city:
+          database-strategy:
+            hint:
+              algorithm-class-name: com.pwx.hint.MyHintShardingAlgorithm
