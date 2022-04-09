@@ -38,6 +38,6 @@ public class MyHintShardingAlgorithm implements HintShardingAlgorithm<Long> {
 
     @Override
     public String getType() {
-        return null;
+        return "HINT";
     }
 }

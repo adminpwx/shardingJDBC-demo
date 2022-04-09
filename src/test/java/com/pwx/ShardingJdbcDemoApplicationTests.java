@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Date;
 
 @SpringBootTest
 class ShardingJdbcDemoApplicationTests {
@@ -23,13 +23,14 @@ class ShardingJdbcDemoApplicationTests {
     @Test
     void testAdd() {
         HintManager hintManager = HintManager.getInstance();
-        // 通过MyHintShardingAlgorithm可知，强制路由到ds-${value%2}
-        hintManager.setDatabaseShardingValue(1L);
+        // 通过MyHintShardingAlgorithm可知，强制路由到ds${value%2}
+        //直接指定数据库
+//        hintManager.setDatabaseShardingValue(1L);
+        hintManager.addDatabaseShardingValue("t_city",0);
         for (int i = 0; i < 10; i++) {
             City city = new City();
-            city.setId((long)i);
-            city.setName("test_1_商丘市" + i);
-            city.setProvince("test_1_河南省" + i);
+            city.setName("test_商丘市" + i);
+            city.setProvince("test_河南省" + i);
             cityMapper.insert(city);
         }
     }
