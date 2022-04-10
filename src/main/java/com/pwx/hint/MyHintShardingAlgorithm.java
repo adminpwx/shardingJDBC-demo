@@ -8,23 +8,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * @ClassName: MyHintShardingAlgorithm
- * @Description: Hint使用场景：
- * 1、数据分片操作，如果分片键没有在SQL或数据表中，而是在业务逻辑代码中
- * 2、读写分离操作，如果强制在主库进行某些数据操作
- * @Author: qjc
- * @Date: 2021/11/10 6:17 下午
+ * @author pwx
  */
 @Slf4j
 public class MyHintShardingAlgorithm implements HintShardingAlgorithm<Long> {
+
+    /**
+     * 自定义Hint 实现算法
+     * 能够保证绕过Sharding-JDBC SQL解析过程
+     * @param availableTargetNames -
+     * @param shardingValue 不再从SQL 解析中获取值，而是直接通过hintManager.addTableShardingValue("t_city", 1)参数指定
+     * @return -
+     */
     @Override
-    public Collection<String> doSharding(Collection<String> availableTargetNames, HintShardingValue<Long> shardingValue) {
+    public Collection<String> doSharding(Collection<String> availableTargetNames,
+                                         HintShardingValue<Long> shardingValue) {
+        log.info("shardingValue={}", shardingValue);
+        log.info("availableTargetNames={}", availableTargetNames);
         Collection<String> result = new ArrayList<>();
-        for (String each : availableTargetNames) {
-            log.info("each:{}", each);
+        for (String tableName : availableTargetNames) {
             for (Long value : shardingValue.getValues()) {
-                if (each.endsWith(String.valueOf(value % 2))) {
-                    result.add(each);
+                if (tableName.endsWith(String.valueOf(value % 2))) {
+                    result.add(tableName);
                 }
             }
         }
